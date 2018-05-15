@@ -1,3 +1,8 @@
+var xml2js = require('xml2js');
+var Q = require('q');
+var deferred = Q.defer();
+var weathers = [];
+
 module.exports = {
 	handle : function (event, text){
 		if(isGreeting(text)){
@@ -12,6 +17,8 @@ module.exports = {
 			doLucky(event);
 		} else if(isGodzilla(text)){
 			doGodzilla(event);
+		} else if(isWeather(text)){
+			doWeather(event);
 		}
 	}
 }
@@ -89,7 +96,7 @@ function getRandLucky(event) {
 
 // 問籤用語
 function isGodzilla(text){
-	return text && (text.indexOf("哥吉拉") != -1);
+	return text && (text.indexOf("哥吉") != -1);
 }
 function doGodzilla(event) {
 	var answer = getRandGodzilla();
@@ -102,6 +109,70 @@ function getRandGodzilla() {
 }
 
 
+// 問天氣用語
+function isWeather(text){
+	return text && (text.indexOf("今天的天氣") != -1);
+}
+function doWeather(event) {
+	getWeatherJson().then(function(result){
+		console.log(result);
+		response = ['今天'+ result['city'] +'的天氣是'];
+
+		/*result['content'].forEach(function(v, i){
+			response.push()
+		})*/
+		
+		doResponse(event, response);
+	});
+}
+function getWeatherJson() {
+  var cwbAuthKey = 'CWB-77B89E64-F67E-40B9-8831-1C125054FD03';
+  var dataId = getDataIdByCity()
+  xml2js('http://opendata.cwb.gov.tw/opendataapi?dataid=+'dataId'+&authorizationkey='+cwbAuthKey, function(error, response) {
+    var dataSet = response.cwbopendata.dataset;
+    weathers['city'] = dataSet.location.locationName;
+    weathers['content'] = dataSet.paramterSet;
+
+    return deferred.resolve(weathers);
+  });
+
+  return deferred.promise;
+}
+function getDataIdByCity(cityName) {
+	var cityDic = {
+		'台北市':'F-C0032-009'
+		'新北市':'F-C0032-010'
+		'基隆市':'F-C0032-011'
+		'花蓮縣':'F-C0032-012'
+		'宜蘭縣':'F-C0032-013'
+		'金門縣':'F-C0032-014'
+		'澎湖縣':'F-C0032-015'
+		'台南市':'F-C0032-016'
+		'高雄市':'F-C0032-017'
+		'嘉義縣':'F-C0032-018'
+		'嘉義市':'F-C0032-019'
+		'苗栗縣':'F-C0032-020'
+		'台中市':'F-C0032-021'
+		'桃園市':'F-C0032-022'
+		'新竹縣':'F-C0032-023'
+		'新竹市':'F-C0032-024'
+		'屏東縣':'F-C0032-025'
+		'南投縣':'F-C0032-026'
+		'台東縣':'F-C0032-027'
+		'彰化縣':'F-C0032-028'
+		'雲林縣':'F-C0032-029'
+		'連江縣':'F-C0032-030'};
+
+	if(cityName in cityDic){
+		return cityDic[cityName];
+	}else if(cityName+'縣' in cityDic){
+		return cityDic[cityName+'縣'];
+	}else if(cityName+'市' in cityDic){
+		return cityDic[cityName+'市'];
+	}else{
+		return cityDic['台北市'];
+	}
+}
 
 //共通Function
 function getRandomInt(min, max) {
