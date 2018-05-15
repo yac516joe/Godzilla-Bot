@@ -1,6 +1,8 @@
 var fs = require('fs');
-var xml2js = require('xml2js');
+var parseString = require('xml2js').parseString;
 var Q = require('q');
+var http = require('http');
+
 var deferred = Q.defer();
 var weathers = [];
 
@@ -130,17 +132,19 @@ function getWeatherJson() {
 	var parser = new xml2js.Parser();
 	var cwbAuthKey = 'CWB-77B89E64-F67E-40B9-8831-1C125054FD03';
 	var dataId = getDataIdByCity()
+	var url = 'http://opendata.cwb.gov.tw/opendataapi?dataid=' + dataId + '&authorizationkey=' + cwbAuthKey;
+	xmlToJson(url, function(err, data) {
+		if (err) {
+	  	  	deferred.reject(err);
+		}
+		console.log(JSON.stringify(data, null, 2));
 
-	fs.readFile('http://opendata.cwb.gov.tw/opendataapi?dataid=' + dataId + '&authorizationkey=' + cwbAuthKey, function(err, data) {
-		    console.log(err, data);
-	    parser.parseString(data, function (err, response) {
-		    var dataSet = response.cwbopendata.dataset;
-		    weathers['city'] = dataSet.location.locationName;
-		    weathers['content'] = dataSet.paramterSet;
+		var dataSet = response.cwbopendata.dataset;
 
-		    return deferred.resolve(weathers);
-	    });
-	});
+		weathers['city'] = dataSet.location.locationName;
+		weathers['content'] = dataSet.paramterSet;
+		deferred.resolve(weathers);
+	})
 
 	return deferred.promise;
 }
@@ -179,6 +183,31 @@ function getDataIdByCity(cityName) {
 		return cityDic['台北市'];
 	}
 }
+
+function xmlToJson(url, callback) {
+  var req = http.get(url, function(res) {
+    var xml = '';
+    
+    res.on('data', function(chunk) {
+      xml += chunk;
+    });
+
+    res.on('error', function(e) {
+      callback(e, null);
+    }); 
+
+    res.on('timeout', function(e) {
+      callback(e, null);
+    }); 
+
+    res.on('end', function() {
+      parseString(xml, function(err, result) {
+        callback(null, result);
+      });
+    });
+  });
+}
+
 
 //共通Function
 function getRandomInt(min, max) {
