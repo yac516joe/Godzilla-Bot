@@ -74,13 +74,17 @@ function isLucky(text){
 	return text && (text.indexOf("今天的運勢") != -1);
 }
 function doLucky(event) {
-	var answer = getRandLucky();
-	response = [answer];
+	var answer = getRandLucky(event);
+	response = ["哥吉兄弟今天的運勢吼！", answer];
 	doResponse(event, response);
 }
-function getRandLucky() {
+function getRandLucky(event) {
 	var answer = ["哥吉吉", "哥吉小吉", "哥吉大吉（☆∀☆）", "哥吉中吉", "哥吉凶", "哥吉小胸(☉_☉)", "哥吉大凶(。・ε・。)"];
-	return answer[getRandomInt(0, answer.length)];
+	var useridToNum = event.source.userId.hexEncode();
+	var today = new Date();
+	var todayToNum = today.getFullYear()+today.getMonth()+today.getDate();
+
+	return answer[(useridToNum+todayToNum) % answer.length];
 }
 
 // 問籤用語
@@ -111,4 +115,16 @@ function doResponse(event, response){
       // error 
       console.log('error');
     });
+}
+
+String.prototype.hexEncode = function(){
+    var hex, i;
+
+    var result = "";
+    for (i=0; i<this.length; i++) {
+        hex = this.charCodeAt(i).toString(16);
+        result += ("000"+hex).slice(-4);
+    }
+
+    return result
 }
