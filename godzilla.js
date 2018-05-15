@@ -1,4 +1,4 @@
-var xml2js = require('xml2js');
+var xml2js = require('xml2js').parseString;
 var Q = require('q');
 var deferred = Q.defer();
 var weathers = [];
