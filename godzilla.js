@@ -132,8 +132,9 @@ function getWeatherJson() {
 	var dataId = getDataIdByCity()
 
 	fs.readFile('http://opendata.cwb.gov.tw/opendataapi?dataid=' + dataId + '&authorizationkey=' + cwbAuthKey, function(err, data) {
+		    console.log(data);
 	    parser.parseString(data, function (err, response) {
-		    console.log(response);
+		    console.log(err, response);
 		    var dataSet = response.cwbopendata.dataset;
 		    weathers['city'] = dataSet.location.locationName;
 		    weathers['content'] = dataSet.paramterSet;
