@@ -82,7 +82,7 @@ function getRandLucky(event) {
 	var answer = ["哥吉吉", "哥吉小吉", "哥吉大吉（☆∀☆）", "哥吉中吉", "哥吉凶", "哥吉小胸(☉_☉)", "哥吉大凶(。・ε・。)"];
 	var useridToNum = event.source.userId.hexEncode();
 	var today = new Date();
-	var todayToNum = today.getFullYear()+today.getMonth()+today.getDate();
+	var todayToNum = today.getFullYear()*today.getMonth()*today.getDate();
 
 	return answer[(useridToNum+todayToNum) % answer.length];
 }
