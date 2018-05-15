@@ -128,6 +128,7 @@ function doWeather(event) {
 function getWeatherJson() {
   var cwbAuthKey = 'CWB-77B89E64-F67E-40B9-8831-1C125054FD03';
   var dataId = getDataIdByCity()
+    console.log('http://opendata.cwb.gov.tw/opendataapi?dataid=' + dataId + '&authorizationkey=' + cwbAuthKey);
   xml2js('http://opendata.cwb.gov.tw/opendataapi?dataid=' + dataId + '&authorizationkey=' + cwbAuthKey, function(error, response) {
     console.log(response);
     var dataSet = response.cwbopendata.dataset;
