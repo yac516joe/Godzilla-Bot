@@ -1,4 +1,5 @@
-var xml2js = require('xml2js').parseString;
+var fs = require('fs');
+var xml2js = require('xml2js');
 var Q = require('q');
 var deferred = Q.defer();
 var weathers = [];
@@ -126,19 +127,22 @@ function doWeather(event) {
 	});
 }
 function getWeatherJson() {
-  var cwbAuthKey = 'CWB-77B89E64-F67E-40B9-8831-1C125054FD03';
-  var dataId = getDataIdByCity()
-    console.log('http://opendata.cwb.gov.tw/opendataapi?dataid=' + dataId + '&authorizationkey=' + cwbAuthKey);
-  xml2js('http://opendata.cwb.gov.tw/opendataapi?dataid=' + dataId + '&authorizationkey=' + cwbAuthKey, function(error, response) {
-    console.log(response);
-    var dataSet = response.cwbopendata.dataset;
-    weathers['city'] = dataSet.location.locationName;
-    weathers['content'] = dataSet.paramterSet;
+	var parser = new xml2js.Parser();
+	var cwbAuthKey = 'CWB-77B89E64-F67E-40B9-8831-1C125054FD03';
+	var dataId = getDataIdByCity()
 
-    return deferred.resolve(weathers);
-  });
+	fs.readFile('http://opendata.cwb.gov.tw/opendataapi?dataid=' + dataId + '&authorizationkey=' + cwbAuthKey, function(err, data) {
+	    parser.parseString(data, function (err, response) {
+		    console.log(response);
+		    var dataSet = response.cwbopendata.dataset;
+		    weathers['city'] = dataSet.location.locationName;
+		    weathers['content'] = dataSet.paramterSet;
 
-  return deferred.promise;
+		    return deferred.resolve(weathers);
+	    });
+	});
+
+	return deferred.promise;
 }
 function getDataIdByCity(cityName) {
 	var cityDic = {
