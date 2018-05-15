@@ -129,7 +129,6 @@ function doWeather(event) {
 	});
 }
 function getWeatherJson() {
-	var parser = new xml2js.Parser();
 	var cwbAuthKey = 'CWB-77B89E64-F67E-40B9-8831-1C125054FD03';
 	var dataId = getDataIdByCity()
 	var url = 'http://opendata.cwb.gov.tw/opendataapi?dataid=' + dataId + '&authorizationkey=' + cwbAuthKey;
