@@ -4,7 +4,6 @@ var Q = require('q');
 var http = require('http');
 
 const isWeatherRegex = /今天(\S*)的天氣/;
-var deferred = Q.defer();
 var weathers = [];
 
 module.exports = {
@@ -136,6 +135,7 @@ function doWeather(event, text) {
 	});
 }
 function getWeatherJson(cityName) {
+	var deferred = Q.defer();
 	var cwbAuthKey = 'CWB-77B89E64-F67E-40B9-8831-1C125054FD03';
     console.log(3, cityName);
 	var dataId = getDataIdByCity(cityName)
