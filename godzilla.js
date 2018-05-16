@@ -121,6 +121,7 @@ function doWeather(event, text) {
 	var m = isWeatherRegex.exec(text);
     var cityName = m[1];
     console.log(m);
+    console.log(cityName);
 	getWeatherJson(cityName).then(function(result){
 		response = ['今天'+ result['city'] +'的天氣是'];
 
@@ -133,7 +134,9 @@ function doWeather(event, text) {
 }
 function getWeatherJson(cityName) {
 	var cwbAuthKey = 'CWB-77B89E64-F67E-40B9-8831-1C125054FD03';
+    console.log(cityName);
 	var dataId = getDataIdByCity(cityName)
+    console.log(dataId);
 	var url = 'http://opendata.cwb.gov.tw/opendataapi?dataid=' + dataId + '&authorizationkey=' + cwbAuthKey;
 	xmlToJson(url, function(err, data) {
 		if (err) {
