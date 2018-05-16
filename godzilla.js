@@ -3,7 +3,7 @@ var parseString = require('xml2js').parseString;
 var Q = require('q');
 var http = require('http');
 
-const isWeatherRegex = /今天\S*的天氣/;
+const isWeatherRegex = /今天(\S*)的天氣/;
 var deferred = Q.defer();
 var weathers = [];
 
