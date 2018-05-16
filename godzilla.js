@@ -138,10 +138,15 @@ function getWeatherJson() {
 		}
 		console.log(JSON.stringify(data, null, 2));
 
+		var response = JSON.parse(data);
 		var dataSet = response.cwbopendata.dataset;
+		console.log(dataSet);
 
 		weathers['city'] = dataSet.location.locationName;
 		weathers['content'] = dataSet.paramterSet;
+
+		console.log(weathers);
+		
 		deferred.resolve(weathers);
 	})
 
