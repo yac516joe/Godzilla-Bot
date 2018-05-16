@@ -3,6 +3,7 @@ var parseString = require('xml2js').parseString;
 var Q = require('q');
 var http = require('http');
 
+const isWeatherRegex = /今天\S*的天氣/;
 var deferred = Q.defer();
 var weathers = [];
 
@@ -21,7 +22,7 @@ module.exports = {
 		} else if(isGodzilla(text)){
 			doGodzilla(event);
 		} else if(isWeather(text)){
-			doWeather(event);
+			doWeather(event, text);
 		}
 	}
 }
@@ -114,10 +115,12 @@ function getRandGodzilla() {
 
 // 問天氣用語
 function isWeather(text){
-	return text && (text.indexOf("今天的天氣") != -1);
+	return text && isWeatherRegex.exec(text) !== null;
 }
-function doWeather(event) {
-	getWeatherJson().then(function(result){
+function doWeather(event, text) {
+	var m = isWeatherRegex.exec(text)
+    var cityName = m[1];
+	getWeatherJson(cityName).then(function(result){
 		console.log(result);
 		response = ['今天'+ result['city'] +'的天氣是'];
 
@@ -128,9 +131,9 @@ function doWeather(event) {
 		doResponse(event, response);
 	});
 }
-function getWeatherJson() {
+function getWeatherJson(cityName) {
 	var cwbAuthKey = 'CWB-77B89E64-F67E-40B9-8831-1C125054FD03';
-	var dataId = getDataIdByCity()
+	var dataId = getDataIdByCity(cityName)
 	var url = 'http://opendata.cwb.gov.tw/opendataapi?dataid=' + dataId + '&authorizationkey=' + cwbAuthKey;
 	xmlToJson(url, function(err, data) {
 		if (err) {
