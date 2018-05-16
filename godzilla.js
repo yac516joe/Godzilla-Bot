@@ -120,8 +120,8 @@ function isWeather(text){
 function doWeather(event, text) {
 	var m = isWeatherRegex.exec(text)
     var cityName = m[1];
+    console.log(cityName);
 	getWeatherJson(cityName).then(function(result){
-		console.log(result);
 		response = ['今天'+ result['city'] +'的天氣是'];
 
 		result['content'].forEach(function(v, i){
