@@ -123,7 +123,7 @@ function doWeather(event, text) {
     console.log(1, m);
     console.log(2, cityName);
     weathers = [];
-	getWeatherJson(cityName).success(function(result){
+	getWeatherJson(cityName).then(function(result){
 		response = ['今天'+ result['city'] +'的天氣是'];
 		console.log(8, result['city']);
 
