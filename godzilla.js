@@ -119,17 +119,15 @@ function isWeather(text){
 function doWeather(event, text) {
 	var m = isWeatherRegex.exec(text);
     var cityName = m[1];
-    console.log(1, m);
-    console.log(2, cityName);
     weathers = [];
 	getWeatherJson(cityName).then(function(result){
 		response = ['今天'+ result['city'] +'的天氣是'];
-		console.log(8, result['city']);
 
 		result['content'].forEach(function(v, i){
-			response.push(v.parameterValue[0]);
+			if(i < 2){
+				response.push(v.parameterValue[0]);
+			}
 		})
-		console.log(9, response);
 		
 		doResponse(event, response);
 	});
@@ -137,21 +135,17 @@ function doWeather(event, text) {
 function getWeatherJson(cityName) {
 	var deferred = Q.defer();
 	var cwbAuthKey = 'CWB-77B89E64-F67E-40B9-8831-1C125054FD03';
-    console.log(3, cityName);
 	var dataId = getDataIdByCity(cityName)
-    console.log(4, dataId);
 	var url = 'http://opendata.cwb.gov.tw/opendataapi?dataid=' + dataId + '&authorizationkey=' + cwbAuthKey;
-    console.log(5, url);
+
 	xmlToJson(url, function(err, data) {
 		if (err) {
 	  	  	deferred.reject(err);
 		}
-		console.log(6, JSON.stringify(data));
 		var dataSet = data.cwbopendata.dataset[0];
 
 		weathers['city'] = dataSet.location[0].locationName[0];
 		weathers['content'] = dataSet.parameterSet[0].parameter;
-		console.log(7, weathers);
 
 		deferred.resolve(weathers);
 	})
