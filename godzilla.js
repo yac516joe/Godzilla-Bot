@@ -137,8 +137,9 @@ function getWeatherJson() {
 	  	  	deferred.reject(err);
 		}
 		console.log(JSON.stringify(data, null, 2));
+		console.log(data);
 
-		var response = JSON.parse(data);
+		var response = data;
 		var dataSet = response.cwbopendata.dataset;
 		console.log(dataSet);
 
@@ -146,7 +147,7 @@ function getWeatherJson() {
 		weathers['content'] = dataSet.paramterSet;
 
 		console.log(weathers);
-		
+
 		deferred.resolve(weathers);
 	})
 
