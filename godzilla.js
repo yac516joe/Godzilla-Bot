@@ -125,10 +125,12 @@ function doWeather(event, text) {
     weathers = [];
 	getWeatherJson(cityName).then(function(result){
 		response = ['今天'+ result['city'] +'的天氣是'];
+		console.log(result['city']);
 
 		result['content'].forEach(function(v, i){
 			response.push(v.parameterValue[0]);
 		})
+		console.log(response);
 		
 		doResponse(event, response);
 	});
@@ -149,6 +151,7 @@ function getWeatherJson(cityName) {
 
 		weathers['city'] = dataSet.location[0].locationName[0];
 		weathers['content'] = dataSet.parameterSet[0].parameter;
+		console.log(weathers);
 
 		deferred.resolve(weathers);
 	})
