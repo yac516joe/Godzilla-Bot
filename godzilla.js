@@ -121,9 +121,9 @@ function doWeather(event) {
 		console.log(result);
 		response = ['今天'+ result['city'] +'的天氣是'];
 
-		/*result['content'].forEach(function(v, i){
-			response.push()
-		})*/
+		result['content'].forEach(function(v, i){
+			response.push(v.parameterValue[0]);
+		})
 		
 		doResponse(event, response);
 	});
@@ -136,17 +136,10 @@ function getWeatherJson() {
 		if (err) {
 	  	  	deferred.reject(err);
 		}
-		console.log(JSON.stringify(data, null, 2));
-		console.log(data);
-
-		var response = data;
-		var dataSet = response.cwbopendata.dataset[0];
-		console.log(dataSet);
+		var dataSet = data.cwbopendata.dataset[0];
 
 		weathers['city'] = dataSet.location[0].locationName[0];
 		weathers['content'] = dataSet.parameterSet[0].parameter;
-
-		console.log(weathers);
 
 		deferred.resolve(weathers);
 	})
