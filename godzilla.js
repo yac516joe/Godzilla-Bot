@@ -221,20 +221,63 @@ function isLuis(text) {
 }
 
 function doLuis(event, text) {
+
+    getLuisJson(text).then(function (result) {
+
+
+        doResponse(event, result);
+    });
+}
+
+function getLuisJson(text) {
     var deferred = Q.defer();
+    var newtext = text.replace(/luis/i, "");
     var cwbAuthKey = '63926f5af6bd4521b10fda9078369e6e';
     // var url = 'http://opendata.cwb.gov.tw/opendataapi?dataid=' + dataId + '&authorizationkey=' + cwbAuthKey;
-    var url = 'https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/718766ef-8cf4-41bc-b6dc-20f9eeac290a?subscription-key=63926f5af6bd4521b10fda9078369e6e&verbose=true&timezoneOffset=0&q=' + text;
+    var url = 'https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/718766ef-8cf4-41bc-b6dc-20f9eeac290a?subscription-key=63926f5af6bd4521b10fda9078369e6e&verbose=true&timezoneOffset=0&q=' + newtext;
 
-    var answer = getLuisRandGreeting();
-    response = [answer];
-    doResponse(event, response);
+    getLuisRandGreeting(url, function (err, data) {
+        if (err) {
+            deferred.reject(err);
+        }
+        var jsonresponse = JObject.Parse(data);
+        intentonly = jsonresponse.SelectToken("intents[0].intent").ToString();
+
+        deferred.resolve(intentonly);
+    })
+
+    return deferred.promise;
 }
 
-function getLuisRandGreeting() {
-    var answer = ["Luis", "LuisTest", "LuisGo", "LuisGood"];
-    return answer[getRandomInt(0, answer.length)];
+//function getLuisRandGreeting() {
+//    var answer = ["Luis", "LuisTest", "LuisGo", "LuisGood"];
+//    return answer[getRandomInt(0, answer.length)];
+//}
+function getLuisRandGreeting(url, callback) {
+  var req = http.get(url, function(res) {
+    var xml = '';
+    
+    res.on('data', function(chunk) {
+      xml += chunk;
+    });
+
+    res.on('error', function(e) {
+      callback(e, null);
+    }); 
+
+    res.on('timeout', function(e) {
+      callback(e, null);
+    }); 
+
+    res.on('end', function() {
+      parseString(xml, function(err, result) {
+        callback(null, result);
+      });
+    });
+  });
 }
+
+
 
 
 //共通Function
