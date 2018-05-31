@@ -217,7 +217,7 @@ function xmlToJson(url, callback) {
 
 // Luis test
 function isLuis(text) {
-    return text && (text.indexOf("luis") != -1 || text.indexOf("Luis") != -1 || text.indexOf("LUIS") != -1);
+    return text && (text.indexOf("luis") == 0 || text.indexOf("Luis") == 0 || text.indexOf("LUIS") == 0);
 }
 
 function doLuis(event, text) {
@@ -232,7 +232,7 @@ function doLuis(event, text) {
 }
 
 function getLuisRandGreeting() {
-    var answer = ["Luis", "LusiTest", "LuisGo", "LuisGood"];
+    var answer = ["Luis", "LuisTest", "LuisGo", "LuisGood"];
     return answer[getRandomInt(0, answer.length)];
 }
 
