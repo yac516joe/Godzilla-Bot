@@ -223,7 +223,6 @@ function isLuis(text) {
 function doLuis(event, text) {
     var deferred = Q.defer();
     var cwbAuthKey = '63926f5af6bd4521b10fda9078369e6e';
-    var dataId = getDataIdByCity(cityName);
     // var url = 'http://opendata.cwb.gov.tw/opendataapi?dataid=' + dataId + '&authorizationkey=' + cwbAuthKey;
     var url = 'https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/718766ef-8cf4-41bc-b6dc-20f9eeac290a?subscription-key=63926f5af6bd4521b10fda9078369e6e&verbose=true&timezoneOffset=0&q=' + text;
 
