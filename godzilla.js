@@ -217,7 +217,7 @@ function xmlToJson(url, callback) {
 
 // Luis test
 function isLuis(text) {
-    return text && (text.indexOf("luis") == 0 || text.indexOf("Luis") == 0 || text.indexOf("LUIS") == 0);
+    return text && (text.indexOf("luis") != -1 || text.indexOf("Luis") != -1 || text.indexOf("LUIS") != -1);
 }
 function doLuis(event, text) {
     var deferred = Q.defer();
