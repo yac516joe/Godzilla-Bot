@@ -222,11 +222,15 @@ function isLuis(text) {
 
 function doLuis(event, text) {
 
-    getLuisJson(text).then(function (result) {
+
+    var newtext = text.replace(/luis-/i, "");
+    doResponse(event, newtext);
+
+    //getLuisJson(text).then(function (result) {
 
 
-        doResponse(event, result);
-    });
+    //    doResponse(event, result);
+    //});
 }
 
 function getLuisJson(text) {
