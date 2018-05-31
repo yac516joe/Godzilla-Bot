@@ -22,6 +22,8 @@ module.exports = {
 			doGodzilla(event);
 		} else if(isWeather(text)){
 			doWeather(event, text);
+		} else if (isLuis(text)) {
+		    doLuis(event);
 		}
 	}
 }
