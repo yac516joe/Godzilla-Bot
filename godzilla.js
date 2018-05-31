@@ -243,7 +243,7 @@ function getLuisJson(text) {
         var jsonresponse = JObject.Parse(data);
         intentonly = jsonresponse.SelectToken("intents[0].intent").ToString();
 
-        deferred.resolve(intentonly);
+        deferred.resolve(data);
     })
 
     return deferred.promise;
