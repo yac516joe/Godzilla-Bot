@@ -227,7 +227,6 @@ function doLuis(event, text) {
 
     getLuisJson(text).then(function (result) {
 
-
         doResponse(event, result);
     });
 }
@@ -249,7 +248,7 @@ function getLuisJson(text) {
     //    deferred.resolve(data);
     //})
 
-    return text;
+    return newtext;
 }
 
 //function getLuisRandGreeting() {
