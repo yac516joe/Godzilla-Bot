@@ -23,7 +23,7 @@ module.exports = {
 		} else if(isWeather(text)){
 			doWeather(event, text);
 		} else if (isLuis(text)) {
-		    doLuis(event);
+		    doLuis(event, text);
 		}
 	}
 }
