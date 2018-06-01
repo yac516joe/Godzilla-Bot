@@ -255,7 +255,7 @@ function doLuis(event, text) {
         //On success of prediction
         onSuccess: function (response) {
             printOnSuccess(response);
-            doResponse(event, topScoringIntent.intent);
+            doResponse(event, response.topScoringIntent.intent);
         },
 
         //On failure of prediction
