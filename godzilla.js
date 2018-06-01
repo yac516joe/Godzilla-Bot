@@ -222,62 +222,51 @@ function isLuis(text) {
 
 function doLuis(event, text) {
 
-    //var newtext = text.replace(/luis-/i, "");
-    //doResponse(event, newtext);
-
-    getLuisJson(text).then(function (result) {
-
-        doResponse(event, result);
-    });
-}
-
-function getLuisJson(text) {
-    var deferred = Q.defer();
     var newtext = text.replace(/luis-/i, "");
-    var cwbAuthKey = '63926f5af6bd4521b10fda9078369e6e';
-    // var url = 'http://opendata.cwb.gov.tw/opendataapi?dataid=' + dataId + '&authorizationkey=' + cwbAuthKey;
-    var url = 'https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/718766ef-8cf4-41bc-b6dc-20f9eeac290a?subscription-key=63926f5af6bd4521b10fda9078369e6e&verbose=true&timezoneOffset=0&q=' + newtext;
 
-    //getLuisRandGreeting(url, function (err, data) {
-    //    if (err) {
-    //        deferred.reject(err);
-    //    }
-    //    var jsonresponse = JObject.Parse(data);
-    //    intentonly = jsonresponse.SelectToken("intents[0].intent").ToString();
+    LUISclient.predict(newtext, {
 
-    //    deferred.resolve(data);
-    //})
+        //On success of prediction
+        onSuccess: function (response) {
+            printOnSuccess(response);
+        },
 
-    return newtext;
-}
-
-//function getLuisRandGreeting() {
-//    var answer = ["Luis", "LuisTest", "LuisGo", "LuisGood"];
-//    return answer[getRandomInt(0, answer.length)];
-//}
-function getLuisRandGreeting(url, callback) {
-  var req = http.get(url, function(res) {
-    var xml = '';
-    
-    res.on('data', function(chunk) {
-      xml += chunk;
+        //On failure of prediction
+        onFailure: function (err) {
+            console.error(err);
+        }
     });
 
-    res.on('error', function(e) {
-      callback(e, null);
-    }); 
+    doResponse(event, newtext);
 
-    res.on('timeout', function(e) {
-      callback(e, null);
-    }); 
-
-    res.on('end', function() {
-      parseString(xml, function(err, result) {
-        callback(null, result);
-      });
-    });
-  });
 }
+
+const LUISClient = require("./luis_sdk");
+
+const APPID = "718766ef-8cf4-41bc-b6dc-20f9eeac290a";
+const APPKEY = "63926f5af6bd4521b10fda9078369e6e";
+
+var LUISclient = LUISClient({
+    appId: APPID,
+    appKey: APPKEY,
+    verbose: true
+});
+
+var printOnSuccess = function (response) {
+    console.log("Query: " + response.query);
+    console.log("Top Intent: " + response.topScoringIntent.intent);
+    console.log("Entities:");
+    for (var i = 1; i <= response.entities.length; i++) {
+        console.log(i + "- " + response.entities[i - 1].entity);
+    }
+    if (typeof response.dialog !== "undefined" && response.dialog !== null) {
+        console.log("Dialog Status: " + response.dialog.status);
+        if (!response.dialog.isFinished()) {
+            console.log("Dialog Parameter Name: " + response.dialog.parameterName);
+            console.log("Dialog Prompt: " + response.dialog.prompt);
+        }
+    }
+};
 
 
 
