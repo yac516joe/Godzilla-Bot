@@ -252,22 +252,19 @@ function doLuis(event, text) {
 
     LUISclient.predict(newtext, {
 
-
         //On success of prediction
         onSuccess: function (response) {
             printOnSuccess(response);
+            doResponse(event, topScoringIntent.intent);
         },
 
         //On failure of prediction
         onFailure: function (err) {
             console.error(err);
+            doResponse(event, "系統錯誤，請洽澎澎~");
         }
     });
-
-    doResponse(event, newtext);
-
 }
-
 
 
 
