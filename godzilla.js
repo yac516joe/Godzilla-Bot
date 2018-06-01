@@ -215,32 +215,6 @@ function xmlToJson(url, callback) {
 }
 
 
-// Luis test
-function isLuis(text) {
-    return text && (text.indexOf("luis-") == 0 || text.indexOf("Luis-") == 0 || text.indexOf("LUIS-") == 0);
-}
-
-function doLuis(event, text) {
-
-    var newtext = text.replace(/luis-/i, "");
-
-    LUISclient.predict(newtext, {
-
-        //On success of prediction
-        onSuccess: function (response) {
-            printOnSuccess(response);
-        },
-
-        //On failure of prediction
-        onFailure: function (err) {
-            console.error(err);
-        }
-    });
-
-    doResponse(event, newtext);
-
-}
-
 const LUISClient = require("./luis_sdk");
 
 const APPID = "718766ef-8cf4-41bc-b6dc-20f9eeac290a";
@@ -267,6 +241,34 @@ var printOnSuccess = function (response) {
         }
     }
 };
+
+
+
+// Luis test
+function isLuis(text) {
+    return text && (text.indexOf("luis-") == 0 || text.indexOf("Luis-") == 0 || text.indexOf("LUIS-") == 0);
+}
+
+function doLuis(event, text) {
+
+    var newtext = text.replace(/luis-/i, "");
+
+    LUISclient.predict(newtext, {
+
+        //On success of prediction
+        onSuccess: function (response) {
+            printOnSuccess(response);
+        },
+
+        //On failure of prediction
+        onFailure: function (err) {
+            console.error(err);
+        }
+    });
+
+    doResponse(event, newtext);
+
+}
 
 
 
