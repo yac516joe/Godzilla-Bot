@@ -215,7 +215,7 @@ function xmlToJson(url, callback) {
 }
 
 // Luis test
-const LUISClient = require("./node_modules/luis_sdk");
+const LUISClient = require("./luis_sdk");
 
 const APPID = "718766ef-8cf4-41bc-b6dc-20f9eeac290a";
 const APPKEY = "63926f5af6bd4521b10fda9078369e6e";
