@@ -214,8 +214,8 @@ function xmlToJson(url, callback) {
   });
 }
 
-
-const LUISClient = require("./luis_sdk");
+// Luis test
+const LUISClient = require("./node_modules/luis_sdk");
 
 const APPID = "718766ef-8cf4-41bc-b6dc-20f9eeac290a";
 const APPKEY = "63926f5af6bd4521b10fda9078369e6e";
@@ -242,9 +242,6 @@ var printOnSuccess = function (response) {
     }
 };
 
-
-
-// Luis test
 function isLuis(text) {
     return text && (text.indexOf("luis-") == 0 || text.indexOf("Luis-") == 0 || text.indexOf("LUIS-") == 0);
 }
@@ -254,6 +251,7 @@ function doLuis(event, text) {
     var newtext = text.replace(/luis-/i, "");
 
     LUISclient.predict(newtext, {
+
 
         //On success of prediction
         onSuccess: function (response) {
